@@ -19,6 +19,7 @@ class Game():
         self.score = 0 # счет игры
         self.FPS = 30 # ФПС - влияет на скорость игры
         self.movie = 'right' # определяет куда будет двигаться змеяя
+        self.run_game = 'stop'
 
     def game_surf(self):
         '''
@@ -51,8 +52,9 @@ class Game():
                     self.movie = 'up'
                 elif event.key == pygame.K_DOWN and self.movie != 'up':
                     self.movie = 'down'
-                elif event.key == pygame.K_ESCAPE:
-                    
+                elif event.key == pygame.K_SPACE:
+                    self.run_game = 'run'
+                elif event.key == pygame.K_ESCAPE: 
                     sys.exit()
         return self.movie
     
@@ -82,11 +84,21 @@ class Game():
         time.sleep(3)
         sys.exit()
     
-    def start_game(): # TODO - сделать перед игрой инструкцию и по клику на клавишу интер начало игры 
-        ...
-    
+    def show_instructions(self): # TODO - сделать перед игрой инструкцию и по клику на клавишу интер начало игры 
+        font1 = pygame.font.SysFont('arial', 32)
+        font2 = pygame.font.SysFont('arial', 18, bold=1)
+        show_start = font1.render('To start the game, press - SPACE', 1, RED, None)
+        show_instructions = font2.render('To exit, press - Esc \n control is carried out using the arrows on the keyboard', 1, RED, None)
+        pos_start = show_start.get_rect()
+        pos_instructions = show_instructions.get_rect()
+        pos_start.center = self.window_width // 2, self.window_hight // 3
+        pos_instructions.center = self.window_width // 2, self.window_hight // 2
+        self.window.blit(show_start, pos_start)
+        self.window.blit(show_instructions, pos_instructions)
+        pygame.display.flip()
+        
     def save_past_result(): # TODO - сделать возможность сохранять лучший и прошлый результат
-        ...           
+        ...
 
 class Apple(Game):
     '''
@@ -203,18 +215,21 @@ game.game_surf()
 
 while True:
     game.keyboard_controller() # главный цикл
-    game.window.fill(BLACK) # заливвка экрана для его обновления
-    game.score = snake.snake_score # передача счет в менеджер игры для отображения на экране
-    game.show_score() # вывод счета гиры
-    snake.snake_move(game.movie) # проверят направления движения змейкит
-    snake.window_border_controller() # отслеживания выхода змеи за пределы экрана
-    snake.check_snake_collied_with_body(game.game_over) # проверка столкнулась ли змейка сама с собой
-    apple.apple_position = snake.snake_body_increase(apple.apple_position[0], apple.apple_position[1], game.window_width, game.window_hight) # передает яблоку новую позиция для создания 
-    snake.snake_draw(game.window) # рисует змею
-    apple.apple_draw(game.window) # рисует яблоко
-    game.window_update() # обновление окна + таймер
-    
-    
+    if game.run_game == 'stop':
+        game.show_instructions()
+    elif game.run_game == 'run':
+        game.window.fill(BLACK) # заливвка экрана для его обновления
+        game.score = snake.snake_score # передача счет в менеджер игры для отображения на экране
+        game.show_score() # вывод счета гиры
+        snake.snake_move(game.movie) # проверят направления движения змейкит
+        snake.window_border_controller() # отслеживания выхода змеи за пределы экрана
+        snake.check_snake_collied_with_body(game.game_over) # проверка столкнулась ли змейка сама с собой
+        apple.apple_position = snake.snake_body_increase(apple.apple_position[0], apple.apple_position[1], game.window_width, game.window_hight) # передает яблоку новую позиция для создания 
+        snake.snake_draw(game.window) # рисует змею
+        apple.apple_draw(game.window) # рисует яблоко
+        game.window_update() # обновление окна + таймер
+
+
 
 
 # if __name__ == '__main__':
