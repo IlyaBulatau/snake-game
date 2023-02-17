@@ -69,15 +69,24 @@ class Game():
        
 
     def game_over(self): # TODO - окончание игр и высветить итоговый счет
+        '''
+        Финкция завершает игру выводя результат
+        '''
         font = pygame.font.SysFont('arial', 52)
         show = font.render(f'Result: {self.score}', 1, RED, None)
         pos = show.get_rect()
         pos.center = (self.window_width//2, self.window_hight//2) 
         self.window.fill(BLACK)
         self.window.blit(show, pos)
-        time.sleep(4)
+        pygame.display.flip()
+        time.sleep(3)
         sys.exit()
-               
+    
+    def start_game(): # TODO - сделать перед игрой инструкцию и по клику на клавишу интер начало игры 
+        ...
+    
+    def save_past_result(): # TODO - сделать возможность сохранять лучший и прошлый результат
+        ...           
 
 class Apple(Game):
     '''
@@ -175,15 +184,13 @@ class Snake(Apple, Game):
             self.snake_position[1] = 0
         return self.snake_position
     
-    def check_snake_collied_with_body(self):
+    def check_snake_collied_with_body(self, game_over):
         '''
-        Проверка - если змейка столкнулась сама с собой - конец игры
+        Проверка - если змейка столкнулась сама с собой - конец игры принимает в качестве параметра функцию из класса Game - game_over()
         '''
         for point in self.snake_body:
             if point[0] == self.snake_position[0] and point[1] == self.snake_position[1]:
-                return True
-        if self.snake_score > 0:
-            return True
+                game_over()
     
 # создание обьектов
 game = Game() 
@@ -201,9 +208,7 @@ while True:
     game.show_score() # вывод счета гиры
     snake.snake_move(game.movie) # проверят направления движения змейкит
     snake.window_border_controller() # отслеживания выхода змеи за пределы экрана
-    if snake.check_snake_collied_with_body():
-        game.game_over()
-    snake.check_snake_collied_with_body() # проверка столкнулась ли змейка сама с собой
+    snake.check_snake_collied_with_body(game.game_over) # проверка столкнулась ли змейка сама с собой
     apple.apple_position = snake.snake_body_increase(apple.apple_position[0], apple.apple_position[1], game.window_width, game.window_hight) # передает яблоку новую позиция для создания 
     snake.snake_draw(game.window) # рисует змею
     apple.apple_draw(game.window) # рисует яблоко
