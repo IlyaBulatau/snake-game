@@ -6,8 +6,10 @@ import time
 
 from colors import *
 
+class Menu: # TODO - сделать меню
+    ...
 
-class Game():
+class Game:
     '''
     Класс мнеджер игры
     '''
@@ -70,12 +72,12 @@ class Game():
         self.window.blit(show_score, pos)
        
 
-    def game_over(self): # TODO - окончание игр и высветить итоговый счет
+    def game_over(self):
         '''
         Финкция завершает игру выводя результат
         '''
         font = pygame.font.SysFont('arial', 52)
-        show = font.render(f'Result: {self.score}', 1, RED, None)
+        show = font.render(f'You DEAD... Result: {self.score}', 1, RED, None)
         pos = show.get_rect()
         pos.center = (self.window_width//2, self.window_hight//2) 
         self.window.fill(BLACK)
@@ -84,20 +86,35 @@ class Game():
         time.sleep(3)
         sys.exit()
     
-    def show_instructions(self): # TODO - сделать перед игрой инструкцию и по клику на клавишу интер начало игры 
+    def show_instructions(self):
+        '''
+        Функция выводит текс 'главного меню' - где описана инструкция к игре
+        '''
+        text = '''To exit, press - Esc 
+        Control is carried out using the arrows on the keyboard
+        Eating an apple will make you grow
+        You can go outside the window
+        You lose if you crash into yourself'''.splitlines() # список текста к инструкций разделенный по переносу строки
+        line_spacing = 0 # расстояние между строками
+        for line in text: # бежим по списку инструкций
+            font2 = pygame.font.SysFont('arial', 18, bold=1) 
+            show_instructions = font2.render(line, 1, RED, None)   
+            pos_instructions = show_instructions.get_rect()
+            pos_instructions.center = self.window_width // 2, self.window_hight // 2 + line_spacing # добавляем высоту к инструкции что бы она находилась ниже и не перекрывала другую
+            line_spacing += 30 
+            self.window.blit(show_instructions, pos_instructions)
+            pygame.display.update() # обновляем экран что бы новая инструкция каждый раз рисовалась ниже 
         font1 = pygame.font.SysFont('arial', 32)
-        font2 = pygame.font.SysFont('arial', 18, bold=1)
         show_start = font1.render('To start the game, press - SPACE', 1, RED, None)
-        show_instructions = font2.render('To exit, press - Esc \n control is carried out using the arrows on the keyboard', 1, RED, None)
         pos_start = show_start.get_rect()
-        pos_instructions = show_instructions.get_rect()
         pos_start.center = self.window_width // 2, self.window_hight // 3
-        pos_instructions.center = self.window_width // 2, self.window_hight // 2
         self.window.blit(show_start, pos_start)
-        self.window.blit(show_instructions, pos_instructions)
         pygame.display.flip()
         
-    def save_past_result(): # TODO - сделать возможность сохранять лучший и прошлый результат
+    def save_past_result(self): # TODO - сделать возможность сохранять лучший и прошлый результат
+        ...
+    
+    def continue_game(self) : # добавить возможность выбора после смерти: либо начать новую игру либо продолжить
         ...
 
 class Apple(Game):
