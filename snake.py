@@ -89,8 +89,20 @@ class Game:
     
     def show_instructions(self):
         '''
-        Функция выводит текс 'главного меню' - где описана инструкция к игре
+        Функция выводит текс 'главного меню' - где описана инструкция к игре, а так же счет лучшего результата
         '''
+        # счет лучшего результата
+        file = open(self.file, 'r') # открываем файл где храниться результат лучшей игры
+        for line in file:
+            best_result = line # и присваем его переменной
+        file.close()
+        font3 = pygame.font.SysFont('arial', 20)
+        show_result = font3.render(f'You bset result {best_result}', 1, RED, None)
+        pos_result = show_result.get_rect()
+        pos_result.topleft = self.window_width // 10, self.window_hight // 10
+        self.window.blit(show_result, pos_result)
+
+        # текс инструкции
         text = '''To exit, press - Esc 
         Control is carried out using the arrows on the keyboard
         Eating an apple will make you grow
@@ -105,6 +117,8 @@ class Game:
             line_spacing += 30 
             self.window.blit(show_instructions, pos_instructions)
             pygame.display.update() # обновляем экран что бы новая инструкция каждый раз рисовалась ниже 
+
+        # текст для старта игры    
         font1 = pygame.font.SysFont('arial', 32)
         show_start = font1.render('To start the game, press - SPACE', 1, RED, None)
         pos_start = show_start.get_rect()
