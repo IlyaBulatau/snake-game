@@ -3,8 +3,12 @@ import pygame
 from random import randrange
 import sys
 import time
+import os
 
 from colors import *
+
+# путь к файлу с результатами
+path = os.path.abspath(os.path.dirname(__file__))
 
 class Menu: # TODO - сделать меню
     ...
@@ -18,7 +22,7 @@ class Game:
         self.window_width = 720 # ширина окна
         self.window_hight = 480 # высота окна
         self.clock = pygame.time.Clock() # переменная таймера
-        self.file = 'C:/Users/postgres.DESKTOP-5271P7V/Desktop/gamepython/snake/result.txt'
+        self.file = path + '\\result.txt'
         self.score = 0 # счет игры
         self.FPS = 30 # ФПС - влияет на скорость игры
         self.movie = 'right' # определяет куда будет двигаться змеяя
@@ -85,7 +89,7 @@ class Game:
         self.window.blit(show, pos)
         pygame.display.flip()
         time.sleep(3)
-        sys.exit()
+        self.run_game = 'stop'
     
     def show_instructions(self):
         '''
@@ -259,6 +263,7 @@ game.game_surf()
 while True:
     game.keyboard_controller() # главный цикл
     if game.run_game == 'stop':
+        
         game.show_instructions()
     elif game.run_game == 'run':
         game.window.fill(BLACK) # заливвка экрана для его обновления
