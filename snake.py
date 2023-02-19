@@ -18,6 +18,7 @@ class Game:
         self.window_width = 720 # ширина окна
         self.window_hight = 480 # высота окна
         self.clock = pygame.time.Clock() # переменная таймера
+        self.file = 'snake/result.txt'
         self.score = 0 # счет игры
         self.FPS = 30 # ФПС - влияет на скорость игры
         self.movie = 'right' # определяет куда будет двигаться змеяя
@@ -111,8 +112,18 @@ class Game:
         self.window.blit(show_start, pos_start)
         pygame.display.flip()
         
-    def save_past_result(self): # TODO - сделать возможность сохранять лучший и прошлый результат
-        ...
+    def save_result(self): # TODO - сделать возможность сохранять лучший и прошлый результат
+        # with open(self.file, 'a+') as file:
+        #     for line in file:
+        #         if int(line) < self.score:
+        #                 file.write(str(self.score))
+        file = open(self.file, 'r')
+        for line in file:
+            if int(line) < self.score:
+                file = open(self.file, 'w')
+                file.write(str(self.score))
+        file.close()
+            
     
     def continue_game(self) : # добавить возможность выбора после смерти: либо начать новую игру либо продолжить
         ...
@@ -213,12 +224,13 @@ class Snake(Apple, Game):
             self.snake_position[1] = 0
         return self.snake_position
     
-    def check_snake_collied_with_body(self, game_over):
+    def check_snake_collied_with_body(self, game_over, save_result):
         '''
         Проверка - если змейка столкнулась сама с собой - конец игры принимает в качестве параметра функцию из класса Game - game_over()
         '''
         for point in self.snake_body:
             if point[0] == self.snake_position[0] and point[1] == self.snake_position[1]:
+                save_result()
                 game_over()
     
 # создание обьектов
@@ -240,10 +252,11 @@ while True:
         game.show_score() # вывод счета гиры
         snake.snake_move(game.movie) # проверят направления движения змейкит
         snake.window_border_controller() # отслеживания выхода змеи за пределы экрана
-        snake.check_snake_collied_with_body(game.game_over) # проверка столкнулась ли змейка сама с собой
+        snake.check_snake_collied_with_body(game.game_over, game.save_result) # проверка столкнулась ли змейка сама с собой
         apple.apple_position = snake.snake_body_increase(apple.apple_position[0], apple.apple_position[1], game.window_width, game.window_hight) # передает яблоку новую позиция для создания 
         snake.snake_draw(game.window) # рисует змею
         apple.apple_draw(game.window) # рисует яблоко
+        game.save_result()
         game.window_update() # обновление окна + таймер
 
 
