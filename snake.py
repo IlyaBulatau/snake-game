@@ -18,7 +18,7 @@ class Game:
         self.window_width = 720 # ширина окна
         self.window_hight = 480 # высота окна
         self.clock = pygame.time.Clock() # переменная таймера
-        self.file = 'snake/result.txt'
+        self.file = 'C:/Users/postgres.DESKTOP-5271P7V/Desktop/gamepython/snake/result.txt'
         self.score = 0 # счет игры
         self.FPS = 30 # ФПС - влияет на скорость игры
         self.movie = 'right' # определяет куда будет двигаться змеяя
